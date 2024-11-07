@@ -277,7 +277,8 @@ img {
 
 .home__profession{
   position: relative;
-  font-size: var(--big-font-size);
+  font-size: var(--normal-font-size);
+  font-weight: var(--font-bold);
   color: var(--text-color);
 }
 
