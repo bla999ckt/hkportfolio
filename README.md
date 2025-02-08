@@ -10,7 +10,7 @@ Welcome to my personal portfolio website! This website showcases my projects, sk
 ## 🛠️ Technologies Used
 - HTML
 - CSS
-- JavaScript (if applicable)
+- JavaScript 
 
 ## 📂 Installation
 To run the website locally:
