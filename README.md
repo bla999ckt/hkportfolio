@@ -21,7 +21,7 @@ open index.html
 ```
 
 ## 🌐 Live Demo
-You can view my portfolio live at: [your-website-link](https://your-website-link.com)
+You can view my portfolio live at: [website](https://hanaportfolio.netlify.app/)
 
 ## ⚖️ License
 This work is licensed under the **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)** license. This means:
