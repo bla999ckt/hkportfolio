@@ -15,8 +15,8 @@ Welcome to my personal portfolio website! This website showcases my projects, sk
 ## 📂 Installation
 To run the website locally:
 ```sh
-git clone https://github.com/yourusername/your-repo.git
-cd your-repo
+git clone https://github.com/bla999ckt/hkportfolio.git
+cd hkportfolio
 open index.html
 ```
 
