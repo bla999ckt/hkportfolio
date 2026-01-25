@@ -394,6 +394,23 @@ img {
   transform: translateX(.5rem);
 }
 
+/* Prevent the general link-hover rule from shifting carousel arrow glyphs.
+   Carousel glyphs have their own hover/motion behavior and should not
+   inherit the .work__link hover translate. */
+.work__link:hover .carousel__btn i {
+  transform: none !important;
+}
+
+/* Normalize mixed-size images in Certificates grid */
+#certificates .work__img{
+  width: 100%;
+  aspect-ratio: 620 / 427; /* keeps a consistent frame (like 620x427) */
+  object-fit: contain;     /* letterboxes smaller/taller images without cropping */
+  background-color: var(--body-color);
+  padding: .5rem;          /* visual padding as the fill around non-matching images */
+  border: 1px solid hsl(var(--hue), 30%, 35%);
+}
+
 /*=============== INFO ===============*/
 .info__container{
   row-gap: 3rem;
@@ -464,6 +481,43 @@ img {
   display: block;
   font-size: var(--small-font-size);
   margin-bottom: .75rem;
+}
+
+/* LANGUAGES */
+.languages__content{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem 1rem;
+}
+
+.language__chip{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--container-color);
+  padding: .65rem .9rem;
+  border: 1px solid hsl(var(--hue), 30%, 35%);
+}
+
+.language__name{
+  font-weight: var(--font-semi-bold);
+  color: var(--title-color);
+}
+
+.language__level{
+  color: var(--text-color-light);
+  font-size: var(--small-font-size);
+}
+
+/* CERTIFICATES */
+.certificates__list{
+  display: grid;
+  row-gap: .5rem;
+}
+
+.certificates__item{
+  background-color: var(--container-color);
+  padding: .75rem 1rem;
 }
 
 /* SKILLS */
@@ -783,6 +837,46 @@ img {
     font-size: 2rem;
   }
 
+  /* Desktop: create a robust framed area with a 640x427 ratio using
+     the padding-top trick. Images are absolutely positioned inside the
+     padded frame and will scale to fit without cropping. */
+  .work__carousel .carousel__container{
+    position: relative;
+    width: 100%;
+    max-width: 100%;      /* ensure container never exceeds card width */
+    padding: 0.75rem;      /* visual padding around images */
+    box-sizing: border-box;
+    background-color: var(--container-color);
+    overflow: hidden;
+    margin: 0;             /* don't allow extra width from margins */
+  }
+
+  /* pseudo-element drives the aspect ratio (427/640 = 66.71875%) */
+  .work__carousel .carousel__container::before{
+    content: '';
+    display: block;
+    width: 100%;
+    padding-top: 66.71875%;
+  }
+
+  /* absolutely position images inside the padded frame and center them */
+  .work__carousel .carousel__img{
+    position: absolute;
+    /* inset keeps the image inside the padded frame and is easier to read */
+    inset: 0.75rem;
+    box-sizing: border-box;
+    /* allow the image to scale down to fit the frame but never grow past it */
+    width: auto;
+    height: auto;
+    max-width: calc(100% - 1.5rem);
+    max-height: calc(100% - 1.5rem);
+    object-fit: contain;
+    margin: 0 auto;
+    /* display is controlled by the global .carousel__img rules later in the file */
+    border-radius: 0.5rem;
+    z-index: 2;
+  }
+
   .info__container{
     row-gap: 4rem;
   }
@@ -814,6 +908,10 @@ img {
   }
   .experience__company{
     font-size: var(--h1-font-size);
+  }
+
+  .languages__content{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
   .experience__profession{
     margin-bottom: .5rem;
@@ -872,4 +970,160 @@ img {
     right: 2rem;
     transform: translateY(-1rem);
   }
+}
+
+/*=============== CAROUSEL ===============*/
+.work__carousel {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+}
+
+.carousel__container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: var(--container-color);
+  min-height: 200px;
+}
+
+.carousel__img {
+  width: 100%;
+  height: auto;
+  display: none;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.carousel__img.active {
+  display: block;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.carousel__btn {
+  position: absolute;
+  top: 47%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: var(--title-color);
+  border: none;
+  padding: 0;
+  width: 36px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 1.15rem;
+  transition: background-color 0.18s ease, box-shadow 0.18s ease;
+  z-index: 12;
+  box-shadow: 0 6px 12px rgba(2,6,23,0.35);
+}
+
+/* keep the box stable; only change its background on hover */
+.carousel__btn:hover {
+  background-color: rgba(0, 0, 0, 0.65);
+}
+
+.carousel__btn--prev {
+  left: 0.5rem; /* sit inside the container padding so it doesn't overlap the image */
+}
+
+.carousel__btn--next {
+  right: 0.5rem; /* sit inside the container padding so it doesn't overlap the image */
+}
+
+/* Nudge only the arrow icon inside the button so it lines up with
+   the rounded shadow box behind it (optical alignment). */
+.carousel__btn i{
+  position: relative;
+  top: 1.5px;               /* small vertical nudge for optical center */
+  left: 0px;              /* base horizontal offset; per-side tweaks below */
+  font-size: 1.15rem;     /* slightly larger so it reads bolder */
+  font-weight: 700;       /* try to make icon visually heavier */
+  transition: transform 0.18s ease, color 0.18s ease;
+  /* minor text shadow helps icon appear bolder on translucent bg */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+}
+
+.carousel__btn--prev i{
+  left: -2px;  /* small left nudge for visual centering */
+}
+
+.carousel__btn--next i{
+  left: 2px;   /* small right nudge for visual centering */
+}
+
+/* Move only the glyph when hovering the button OR the picture container.
+   Prev arrow moves slightly up-left; next arrow up-right. */
+.carousel__btn:hover i,
+.carousel__container:hover .carousel__btn i {
+  color: var(--title-color);
+}
+
+.carousel__btn--prev:hover i,
+.carousel__container:hover .carousel__btn--prev i {
+  transform: translate(-4px, -4px);
+}
+
+.carousel__btn--next:hover i,
+.carousel__container:hover .carousel__btn--next i {
+  transform: translate(4px, -4px);
+}
+
+.carousel__dots {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 5;
+}
+
+.carousel__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.carousel__dot.active {
+  background-color: var(--first-color);
+}
+
+.work__external-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--first-color);
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  /* ensure the external-link sits above carousel elements and is clickable */
+  position: absolute;
+  top: 1.8rem;
+  right: 1.5rem;
+  z-index: 40;
+  pointer-events: auto;
+}
+
+.work__external-link:hover {
+  color: var(--first-color-light);
+  transform: translateX(0.25rem);
 }
