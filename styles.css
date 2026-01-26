@@ -264,8 +264,9 @@ img {
   width: 220px;
   justify-self: center;
   mask-image: linear-gradient(to bottom,
-              hsla(var(--hue), 40%, 16%) 60%,
-              transparent 100%);
+          hsla(var(--hue), 40%, 16%) 85%,
+          hsla(var(--hue), 40%, 16%, 0.6) 95%,
+          transparent 100%);
 }
 
 .home__name{
