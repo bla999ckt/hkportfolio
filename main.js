@@ -100,7 +100,7 @@ const sr = ScrollReveal({
     distance: '60px',
     duration: 2500,
     delay: 200,
-    reset: true //to repeat animations
+    reset: false // keep revealed content visible after scrolling past it
 })
 
 sr.reveal(`.home__data, .experience, .skills, .contact__container, #certificates .work__card`)
